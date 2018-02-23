@@ -20,5 +20,5 @@ if not os.path.exists(gradle_dir):
     gradle_unpacked = env.UnpackAll(gradle_dir, gradle_zip)
 
 # export the location of the gradle script
-android_gradle = os.path.join(Dir('.').abspath, gradle_dir, 'bin/gradle')
+android_gradle = os.path.join(Dir('.').abspath, gradle_dir, 'bin', 'gradle')
 env.Replace(ANDROID_GRADLE=android_gradle)
