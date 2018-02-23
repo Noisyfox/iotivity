@@ -21,7 +21,24 @@ elif host_os == 'darwin':
     ndk_url = ndk_url_base + '-darwin-x86_64.zip'
     ndk_bundle = 'android-ndk-' + NDK_VER + '.zip'
 else:
-    if host_arch in ['x86_64']:
+    # Detect if it's a 64 bit windows. The code below
+    # should get the arch of the running windows regardless
+    # of python interpreter version & arch.
+
+    # Check if current interpreter is running in 64bits
+    is_64bits = sys.maxsize > 2**32
+
+    if not is_64bits:
+        # Check if running in wow64 mode
+        import ctypes
+        isWow64 = ctypes.c_bool()
+        handle = ctypes.windll.kernel32.GetCurrentProcess() # should be -1, because the current process is currently defined as (HANDLE) -1
+        success = ctypes.windll.kernel32.IsWow64Process(handle, ctypes.byref(isWow64)) # should return 1
+
+        # A 32bits interpreter running in wow64 mode means it's running on a 64bits windows.
+        is_64bits = (success and isWow64).value
+    
+    if is_64bits:
         ndk_url = ndk_url_base + '-windows-x86_64.exe'
     else:
         ndk_url = ndk_url_base + '-windows-x86.exe'
