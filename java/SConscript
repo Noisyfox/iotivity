@@ -117,7 +117,7 @@ if target_os in ['android']:
 
 
 def ensure_libs(target, source, env):
-    if platform.system() == 'Windows':
+    if target_os == 'windows':
         return target, [source, env.get('BUILD_DIR') + 'ca-interface.dll',
                                 env.get('BUILD_DIR') + 'ocstack-jni.dll']
     else:
