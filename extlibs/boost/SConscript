@@ -77,7 +77,6 @@ elif target_os in ['windows']:
 
 elif target_os in ['android']:
     boost_env.Tool('URLDownload', toolpath=['../../tools/scons'])
-    boost_env.Tool('UnpackAll', toolpath=['../../tools/scons'])
     boost_env.Tool('BoostBootstrap', toolpath=['../../tools/scons'])
     boost_env.Tool('BoostBuild', toolpath=['../../tools/scons'])
 

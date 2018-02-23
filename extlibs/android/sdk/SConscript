@@ -12,8 +12,6 @@ Import('env')
 SDK_VER = 'r24.2'
 src_dir = env.get('SRC_DIR')
 
-SConscript('#/build_common/tools/UnpackAll.py')
-
 host_os = sys.platform
 
 if not env.get('ANDROID_HOME'):
