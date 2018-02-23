@@ -382,7 +382,7 @@ def generate( env ) :
     # read tools for Windows system
     if env["PLATFORM"] != "darwin" and "win" in env["PLATFORM"] :
 
-        if env.WhereIs('7z', env.get('PATH')):
+        if env.WhereIs("7z"):
             toolset["EXTRACTOR"]["TARGZ"]["RUN"]           = "7z"
             toolset["EXTRACTOR"]["TARGZ"]["LISTEXTRACTOR"] = __fileextractor_win_7zip
             toolset["EXTRACTOR"]["TARGZ"]["LISTFLAGS"]     = "x"

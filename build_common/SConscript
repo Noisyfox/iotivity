@@ -373,10 +373,11 @@ if env['CONFIG_ENVIRONMENT_IMPORT']:
     if os.environ['LDFLAGS'] != None:
         env.AppendUnique(LINKFLAGS=Split(os.environ['LDFLAGS']))
 
-if target_os in ['windows']:
+if host in ['windows']:
     # UnpackAll.py needs access to system PATH components that SCons
     # does not include by default - e.g., the path to 7z.exe.
-    env.AppendUnique(PATH=os.environ['PATH'])
+    # See http://scons.org/doc/3.0.1/HTML/scons-user/ch07s03.html
+    env['ENV']['PATH'] = os.environ['PATH']
 
 # Ensure scons is able to change its working directory
 env.SConscriptChdir(1)
