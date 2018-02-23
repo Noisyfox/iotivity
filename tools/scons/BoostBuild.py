@@ -131,6 +131,8 @@ def __action( target, source, env ) :
         cmd.append('--with-'+module)
     cmd.append('headers')
     cmd.append('install')
+    if env["PLATFORM"] in ["win32"] :
+        cmd.append('threadapi=pthread')
 
     # build it now (we need the shell, because some programs need it)
     devnull = open(os.devnull, "wb")
@@ -138,6 +140,11 @@ def __action( target, source, env ) :
 
     if handle.wait() != 0 :
         raise SCons.Errors.BuildError( "Building boost [%s] on the source [%s]" % (cmd, source[0])  )
+    
+    # Patch thread lib name when build on windows
+    if env["PLATFORM"] in ["win32"] :
+        if os.path.isfile(os.path.join(env['PREFIX'], 'lib', 'libboost_thread_pthread.a')):
+            shutil.copyfile(os.path.join(env['PREFIX'], 'lib', 'libboost_thread_pthread.a'), os.path.join(env['PREFIX'], 'lib', 'libboost_thread.a'))
 
 # Define the emitter of the builder
 #
