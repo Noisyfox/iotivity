@@ -111,10 +111,19 @@ p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
 for flags in p.stdout.readlines():
     if flags.startswith('TC_PREFIX='):  # toolchain prefix (include path)
         prefix = flags.replace('TC_PREFIX=', '').strip()
-        env.Replace(CC=prefix + 'gcc')
-        env.Replace(CXX=prefix + 'g++')
-        env.Replace(AR=prefix + 'ar')
-        env.Replace(RANLIB=prefix + 'ranlib')
+
+        # If build on windows, file extensions are required for boost to
+        # find the command.
+        if env["PLATFORM"] in ["win32"] :
+            env.Replace(CC=prefix + 'gcc.exe')
+            env.Replace(CXX=prefix + 'g++.exe')
+            env.Replace(AR=prefix + 'ar.exe')
+            env.Replace(RANLIB=prefix + 'ranlib.exe')
+        else:
+            env.Replace(CC=prefix + 'gcc')
+            env.Replace(CXX=prefix + 'g++')
+            env.Replace(AR=prefix + 'ar')
+            env.Replace(RANLIB=prefix + 'ranlib')
 
     elif flags.startswith('CFLAGS='):
         env.AppendUnique(CFLAGS=Split(flags.replace('CFLAGS=', '')))

@@ -25,7 +25,7 @@
 # to create cross-compiled version of boost. In particular, it has
 # created to create boost binaries for Android's various architectures.
 
-import os, subprocess
+import os, subprocess, shutil
 import SCons.Builder, SCons.Node, SCons.Errors
 
 # Creates the building message
@@ -50,8 +50,7 @@ def __action( target, source, env ) :
     # Windows...
     if env["PLATFORM"] in ["win32"] :
         if env.WhereIs("cmd") :
-            # TODO: Add Windows Support
-            cmd = None
+            cmd = ['b2.exe']
 
     # read the tools on *nix systems and sets the default parameters
     elif env["PLATFORM"] in ["darwin", "linux", "posix"] :
@@ -101,17 +100,17 @@ def __action( target, source, env ) :
         else :
             user_config_file.write('    <compileflags>-D'+value[0]+'\n')
     for value in env['CPPPATH'] :
-        user_config_file.write('    <compileflags>-I'+value+'\n')
+        user_config_file.write('    <compileflags>-I'+value.replace('\\','/')+'\n')
     for flag in ccflags :
         user_config_file.write('    <compileflags>'+flag+'\n')
     for flag in cxxflags :
         user_config_file.write('    <cxxflags>'+flag+'\n')
     user_config_file.write('    ;\n')
-    user_config_file.close();
+    user_config_file.close()
 
     # Ensure that the toolchain is in the PATH
     penv = os.environ.copy()
-    penv["PATH"] = tool_path+":" + penv["PATH"]
+    penv["PATH"] = tool_path + os.pathsep + penv["PATH"]
 
     build_path = 'build' + os.sep + target_os + os.sep + target_arch
 
@@ -136,7 +135,7 @@ def __action( target, source, env ) :
 
     # build it now (we need the shell, because some programs need it)
     devnull = open(os.devnull, "wb")
-    handle  = subprocess.Popen( cmd, env=penv, cwd=cwd ) #, stdout=devnull )
+    handle  = subprocess.Popen( cmd, shell=True, env=penv, cwd=cwd, stdout=devnull )
 
     if handle.wait() != 0 :
         raise SCons.Errors.BuildError( "Building boost [%s] on the source [%s]" % (cmd, source[0])  )

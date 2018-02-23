@@ -83,6 +83,8 @@ elif target_os in ['android']:
 
     if host_os.startswith("linux"):
         boost_bootstrap = boost_base_name + os.sep + 'bootstrap.sh'
+    if host_os == 'win32':
+        boost_bootstrap = boost_base_name + os.sep + 'bootstrap.bat'
     else:
         msg = "Host platform (%s) is currently not supported for boost builds" % host_os
         raise SCons.Errors.EnvironmentError(msg)

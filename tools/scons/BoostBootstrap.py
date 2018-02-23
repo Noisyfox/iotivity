@@ -46,8 +46,7 @@ def __action( target, source, env ) :
     # Windows...
     if env['PLATFORM'] in ['win32'] :
         if env.WhereIs('cmd') :
-            # TODO: Add Windows Support
-            cmd = None
+            cmd = 'bootstrap.bat'
 
     # read the tools on *nix systems and sets the default parameters
     elif env['PLATFORM'] in ['darwin', 'linux', 'posix'] :
