@@ -76,7 +76,6 @@ elif target_os in ['windows']:
         Exit(msg)
 
 elif target_os in ['android']:
-    boost_env.Tool('URLDownload', toolpath=['../../tools/scons'])
     boost_env.Tool('BoostBootstrap', toolpath=['../../tools/scons'])
     boost_env.Tool('BoostBuild', toolpath=['../../tools/scons'])
 
@@ -89,7 +88,7 @@ elif target_os in ['android']:
         raise SCons.Errors.EnvironmentError(msg)
 
     if not os.path.exists(boost_arch_name) and not os.path.exists(boost_base_name):
-        boost_arch_name = boost_env.URLDownload(boost_arch_name, boost_url)
+        boost_arch_name = boost_env.Download(boost_arch_name, boost_url)
 
     if not os.path.exists(boost_base_name):
         boost_arch_name = boost_env.UnpackAll(boost_bootstrap, boost_arch_name)
